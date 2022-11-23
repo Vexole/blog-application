@@ -1,4 +1,4 @@
-require("dotenv").config();
+require('dotenv').config();
 
 const express = require('express');
 const ejs = require('ejs');
@@ -19,6 +19,7 @@ const signOutController = require('./controllers/signOut');
 const authentication = require('./middlewares/authentication');
 const redirectIfAuth = require('./middlewares/redirectIfAuth');
 const loggedIn = require('./middlewares/loggedIn');
+const monogStore = require('connect-mongo');
 
 const app = new express();
 app.use(fileUpload());
@@ -31,6 +32,7 @@ app.use(
     secret: process.env.EXPRESS_SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
+    store: monogStore.create({ mongoUrl: process.env.MONGO_SESSION_URL }),
   })
 );
 app.use('*', loggedIn);
